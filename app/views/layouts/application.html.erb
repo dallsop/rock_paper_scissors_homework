@@ -1,14 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RockPaperScissorsHomework</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
+  <title>RockPaperScissors</title>
+  <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
 </head>
 <body>
 
-<%= yield %>
+<div class="container">
+  <hr>
+
+  <div class="row">
+    <div class="col-md-4">
+      <a href="/play/rock" class="btn btn-warning btn-block btn-lg">Play rock.</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="/play/paper" class="btn btn-warning btn-block btn-lg">Play paper.</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="/play/scissors" class="btn btn-warning btn-block btn-lg">Play scissors.</a>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title text-center">You played <%= @player_move %>.</h3>
+            </div>
+            <div class="panel-body">
+              <img src="/assets/images/<%= @player_move %>.png" class="img-responsive">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title text-center">The computer played <%= @computer_move %>.</h3>
+            </div>
+            <div class="panel-body">
+              <img src="/assets/images/<%= @computer_move %>.png" class="img-responsive">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="well">
+            <h1 class="text-center">You <%= @outcome %>!</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5 class="panel-title">Summary</h5>
+        </div>
+
+        <table class="table table-hover table-striped">
+          <tr>
+            <th>When you played</th>
+            <th>you won</th>
+            <th>you lost</th>
+            <th>you tied</th>
+          </tr>
+
+          <tr>
+            <td>rock</td>
+            <td><%= Move.where({:user_move => 'rock', :user_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'rock', :computer_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'rock', :tie => 1}).count %></td>
+          </tr>
+
+          <tr>
+            <td>paper</td>
+            <td><%= Move.where({:user_move => 'paper', :user_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'paper', :computer_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'paper', :tie => 1}).count %></td>
+          </tr>
+
+          <tr>
+            <td>scissors</td>
+            <td><%= Move.where({:user_move => 'scissors', :user_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'scissors', :computer_wins => 1}).count %></td>
+            <td><%= Move.where({:user_move => 'scissors', :tie => 1}).count %></td>
+          </tr>
+
+          <tr>
+            <th>Total</th>
+            <td><%= Move.where({:user_wins => 1}).count %></td>
+            <td><%= Move.where({:computer_wins => 1}).count %></td>
+            <td><%= Move.where({:tie => 1}).count %></td>
+          </tr>
+        </table>
+      </div>
+
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h5 class="panel-title">
+            Complete history
+            (<%= Move.count %>)
+          </h5>
+        </div>
+
+        <table class="table table-hover table-striped">
+          <tr>
+            <th>User Move</th>
+            <th>Computer Move</th>
+            <th>User Wins</th>
+            <th>Computer Wins</th>
+            <th>Tie</th>
+          </tr>
+          <% Move.all.each do |entry| %>
+              <tr>
+                <td><%= entry.user_move %></td>
+                <td><%= entry.computer_move %></td>
+                <td><%= entry.user_wins %></td>
+                <td><%= entry.computer_wins %></td>
+                <td><%= entry.tie %></td>
+              </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 </body>
 </html>
